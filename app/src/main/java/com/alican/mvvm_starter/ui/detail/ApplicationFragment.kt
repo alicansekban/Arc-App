@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.alican.mvvm_starter.R
 import com.alican.mvvm_starter.base.BaseFragment
+import com.alican.mvvm_starter.data.local.model.FlashLightsEntity
 import com.alican.mvvm_starter.data.model.ResponseModel
 import com.alican.mvvm_starter.databinding.FragmentApplicationBinding
 import com.alican.mvvm_starter.ui.detail.adapter.ItemsAdapter
@@ -15,6 +17,9 @@ import com.murgupluoglu.request.STATUS_ERROR
 import com.murgupluoglu.request.STATUS_LOADING
 import com.murgupluoglu.request.STATUS_SUCCESS
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ApplicationFragment : BaseFragment<FragmentApplicationBinding>() {
@@ -33,6 +38,7 @@ class ApplicationFragment : BaseFragment<FragmentApplicationBinding>() {
     private fun initViews() {
         binding.rvList.adapter = ItemsAdapter {
         }
+        viewModel.getFlashLightsFromDb()
     }
 
 
@@ -51,7 +57,7 @@ class ApplicationFragment : BaseFragment<FragmentApplicationBinding>() {
                     val result = response.responseObject
                     result?.let {
                         if (it.body()?.isNotEmpty() == true) {
-                            initAdapter(it.body()!!)
+                          //  initAdapter(it.body()!!)
                         }
                     }
                 }
@@ -71,7 +77,7 @@ class ApplicationFragment : BaseFragment<FragmentApplicationBinding>() {
                     val result = response.responseObject
                     result?.let {
                         if (it.body()?.isNotEmpty() == true) {
-                            initAdapter(it.body()!!)
+                        //    initAdapter(it.body()!!)
                         }
 
                     }
@@ -92,7 +98,7 @@ class ApplicationFragment : BaseFragment<FragmentApplicationBinding>() {
                     val result = response.responseObject
                     result?.let {
                         if (it.body()?.isNotEmpty() == true) {
-                            initAdapter(it.body()!!)
+                       //     initAdapter(it.body()!!)
                         }
                     }
                 }
@@ -103,7 +109,19 @@ class ApplicationFragment : BaseFragment<FragmentApplicationBinding>() {
 
     private fun initSearch() {
         binding.edtSearch.addTextChangedListener {
-            (binding.rvList.adapter as ItemsAdapter).filter(it.toString())
+            if (it?.length!! > 0) {
+                lifecycleScope.launch {
+                    viewModel.getFlashLightsFromDb(it.toString()).collectLatest { list ->
+                        initAdapter(list)
+                    }
+                }
+            } else {
+                lifecycleScope.launch{
+                    viewModel.getFlashLightsFromDb().collectLatest { list ->
+                        initAdapter(list)
+                    }
+                }
+            }
 
         }
     }
@@ -114,7 +132,11 @@ class ApplicationFragment : BaseFragment<FragmentApplicationBinding>() {
                 viewModel.getColorLights()
             }
             "flashes" -> {
-                viewModel.getFlashLights()
+                lifecycleScope.launch {
+                    viewModel.getFlashLightsFromDb().collect {
+                        initAdapter(it)
+                    }
+                }
             }
             "sosAlerts" -> {
                 viewModel.getSosAlerts()
@@ -122,9 +144,9 @@ class ApplicationFragment : BaseFragment<FragmentApplicationBinding>() {
         }
     }
 
-    private fun initAdapter(items: List<ResponseModel>) {
+    private fun initAdapter(items: List<FlashLightsEntity>) {
         (binding.rvList.adapter as? ItemsAdapter)?.modifyList(items.map { it.copy() }
-            .sortedBy { it.ratingValue?.toInt() })
+            .sortedBy { it.ratingValue.toInt() })
 
     }
 }

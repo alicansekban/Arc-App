@@ -2,9 +2,9 @@ package com.alican.mvvm_starter.data.local
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.alican.mvvm_starter.data.local.model.DataModel
+import com.alican.mvvm_starter.data.local.model.FlashLightsEntity
 
-@Database(entities = [DataModel::class], version = 1)
+@Database(entities = [FlashLightsEntity::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun dao(): AppDao
+    abstract fun flashLightsDao(): FlashLightsDao
 }

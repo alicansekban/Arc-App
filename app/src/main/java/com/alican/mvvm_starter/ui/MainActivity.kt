@@ -3,6 +3,7 @@ package com.alican.mvvm_starter.ui
 import android.os.Bundle
 import android.os.Handler
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.forEach
 import androidx.navigation.NavController
@@ -13,20 +14,98 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.alican.mvvm_starter.R
 import com.alican.mvvm_starter.base.BaseActivity
+import com.alican.mvvm_starter.data.local.model.FlashLightsEntity
 import com.alican.mvvm_starter.databinding.ActivityMainBinding
+import com.alican.mvvm_starter.util.utils.handleError
 import com.google.android.material.navigation.NavigationBarView
 import com.google.android.material.navigation.NavigationView
+import com.murgupluoglu.request.STATUS_ERROR
+import com.murgupluoglu.request.STATUS_LOADING
+import com.murgupluoglu.request.STATUS_SUCCESS
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>(),
     NavController.OnDestinationChangedListener {
 
+    private val viewModel: MainViewModel by viewModels()
     private lateinit var navController: NavController
     private lateinit var appBarConfiguration: AppBarConfiguration
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initNavigation()
+        initObserver()
+    }
+
+    private fun initObserver() {
+        viewModel.flashLightsResponse.observe(this) { response ->
+            when (response.status) {
+                STATUS_LOADING -> {
+                    showProgressDialog()
+                }
+                STATUS_ERROR -> {
+                    hideProgressDialog()
+                    response.handleError(this)
+                }
+                STATUS_SUCCESS -> {
+                    hideProgressDialog()
+                    val result = response.responseObject
+                    result?.let {
+                        if (it.body()?.isNotEmpty() == true) {
+
+                            val list = mutableListOf<FlashLightsEntity>()
+                            it.body()?.forEach {
+                                list.add(FlashLightsEntity(ratingCount = it.ratingCount!!, downloads = it.downloads.toString(), ratingValue = it.ratingValue!!,name = it.name.toString(), packageName = it.packageName.toString(), iconUrl = it.iconUrl.toString()))
+                            }
+
+                            viewModel.insertFlashLightsDataToDb(
+                                list
+                            )
+                        }
+                    }
+                }
+            }
+        }
+        viewModel.colorLightsResponse.observe(this) { response ->
+            when (response.status) {
+                STATUS_LOADING -> {
+                    showProgressDialog()
+                }
+                STATUS_ERROR -> {
+                    hideProgressDialog()
+                    response.handleError(this)
+                }
+                STATUS_SUCCESS -> {
+                    hideProgressDialog()
+                    val result = response.responseObject
+                    result?.let {
+                        if (it.body()?.isNotEmpty() == true) {
+                        }
+
+                    }
+                }
+            }
+        }
+        viewModel.sosAlertsResponse.observe(this) { response ->
+            when (response.status) {
+                STATUS_LOADING -> {
+                    showProgressDialog()
+                }
+                STATUS_ERROR -> {
+                    hideProgressDialog()
+                    response.handleError(this)
+                }
+                STATUS_SUCCESS -> {
+                    hideProgressDialog()
+                    val result = response.responseObject
+                    result?.let {
+                        if (it.body()?.isNotEmpty() == true) {
+                        }
+                    }
+                }
+            }
+        }
+
     }
 
     private fun initNavigation() {
