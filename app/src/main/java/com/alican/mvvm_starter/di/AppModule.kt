@@ -1,4 +1,4 @@
-package com.rohitjakhar.mvvmtemplate.di
+package com.alican.mvvm_starter.di
 
 import android.content.Context
 import androidx.datastore.core.DataStore
@@ -12,12 +12,15 @@ import com.alican.mvvm_starter.data.remote.webservice.WebService
 import com.alican.mvvm_starter.util.Constant.BASE_URL
 import com.alican.mvvm_starter.util.Constant.DATA_STORE_NAME
 import com.alican.mvvm_starter.util.Constant.ROOM_DATA_BASE_NAME
+import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -44,21 +47,29 @@ object AppModule {
         }
     }
 
-    @Singleton
-    @Provides
-    fun provideBasicAuth() = AuthInterceptor()
-
     @Provides
     @Singleton
     fun provideOkHttp(
         loggingInterceptor: HttpLoggingInterceptor,
     ): okhttp3.Call.Factory {
         return OkHttpClient.Builder()
-            .addInterceptor(loggingInterceptor)
-            .callTimeout(600, TimeUnit.SECONDS)
-            .readTimeout(600, TimeUnit.SECONDS)
-            .connectTimeout(10000, TimeUnit.SECONDS)
+            .callTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .addInterceptor(providesOkhttpInterceptor())
             .build()
+    }
+
+    @Provides
+    @Singleton
+    fun providesOkhttpInterceptor(): Interceptor {
+        return Interceptor { chain: Interceptor.Chain ->
+            val original: Request = chain.request()
+            val requestBuilder: Request.Builder = original.newBuilder()
+                .addHeader("JsonStub-User-Key", "f5e0861a-b53d-4b80-9c28-2233780c3d5d")
+            val request: Request = requestBuilder.build()
+            chain.proceed(request)
+        }
     }
 
     @Provides
