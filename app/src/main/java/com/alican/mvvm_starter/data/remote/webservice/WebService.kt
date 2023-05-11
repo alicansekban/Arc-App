@@ -10,11 +10,11 @@ import retrofit2.http.GET
 interface WebService {
 
     @GET("flashlights")
-    suspend fun getFlashLights(): BaseResponse<List<ResponseModel>>
+    suspend fun getFlashLights(): Response<List<ResponseModel>>
 
     @GET("colorlights")
-    suspend fun getColorLights(): BaseResponse<List<ResponseModel>>
+    suspend fun getColorLights(): Response<List<ResponseModel>>
 
     @GET("sosalerts")
-    suspend fun getSosAlerts(): BaseResponse<List<ResponseModel>>
+    suspend fun getSosAlerts(): Response<List<ResponseModel>>
 }

@@ -45,7 +45,12 @@ data class ResponseModel(
 
 	@Json(name="developerName")
 	val developerName: String? = null
-) : Parcelable
+) : Parcelable {
+
+	fun convertRatingToString():String {
+		return ratingValue.toString()
+	}
+}
 
 @Parcelize
 data class PublishDate(
