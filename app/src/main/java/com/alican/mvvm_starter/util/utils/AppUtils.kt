@@ -84,6 +84,22 @@ fun showDialogTop(message: String?, title: String?, activity: Activity) {
     alerter.show()
 }
 
+fun Context.openGooglePlayStore(packageName: String, tryWithWebView: Boolean = true): Boolean =
+    try {
+        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$packageName")))
+        true
+    } catch (e: ActivityNotFoundException) {
+        if (tryWithWebView) {
+            startActivity(
+                Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("https://play.google.com/store/apps/details?id=$packageName")
+                )
+            )
+        }
+        false
+    }
+
 fun Context.showToastMessage(errorMessage: String?, type: ToastType) {
 
     var textColor = -1

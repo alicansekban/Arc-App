@@ -13,6 +13,7 @@ import com.alican.mvvm_starter.data.model.ResponseModel
 import com.alican.mvvm_starter.databinding.FragmentApplicationBinding
 import com.alican.mvvm_starter.ui.detail.adapter.ItemsAdapter
 import com.alican.mvvm_starter.util.utils.handleError
+import com.alican.mvvm_starter.util.utils.openGooglePlayStore
 import com.murgupluoglu.request.STATUS_ERROR
 import com.murgupluoglu.request.STATUS_LOADING
 import com.murgupluoglu.request.STATUS_SUCCESS
@@ -37,8 +38,15 @@ class ApplicationFragment : BaseFragment<FragmentApplicationBinding>() {
 
     private fun initViews() {
         binding.rvList.adapter = ItemsAdapter {
+            it.packageName?.let { it1 -> requireContext().openGooglePlayStore(it1) }
         }
-        viewModel.getFlashLightsFromDb()
+     //   viewModel.getFlashLightsFromDb()
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            binding.swipeRefreshLayout.isRefreshing = false
+            binding.edtSearch.text?.clear()
+            binding.edtSearch.clearFocus()
+            fetchData()
+        }
     }
 
 
@@ -57,7 +65,7 @@ class ApplicationFragment : BaseFragment<FragmentApplicationBinding>() {
                     val result = response.responseObject
                     result?.let {
                         if (it.body()?.isNotEmpty() == true) {
-                          //  initAdapter(it.body()!!)
+                            initAdapter(it.body()!!)
                         }
                     }
                 }
@@ -77,7 +85,7 @@ class ApplicationFragment : BaseFragment<FragmentApplicationBinding>() {
                     val result = response.responseObject
                     result?.let {
                         if (it.body()?.isNotEmpty() == true) {
-                        //    initAdapter(it.body()!!)
+                            initAdapter(it.body()!!)
                         }
 
                     }
@@ -98,7 +106,7 @@ class ApplicationFragment : BaseFragment<FragmentApplicationBinding>() {
                     val result = response.responseObject
                     result?.let {
                         if (it.body()?.isNotEmpty() == true) {
-                       //     initAdapter(it.body()!!)
+                            initAdapter(it.body()!!)
                         }
                     }
                 }
@@ -109,20 +117,7 @@ class ApplicationFragment : BaseFragment<FragmentApplicationBinding>() {
 
     private fun initSearch() {
         binding.edtSearch.addTextChangedListener {
-            if (it?.length!! > 0) {
-                lifecycleScope.launch {
-                    viewModel.getFlashLightsFromDb(it.toString()).collectLatest { list ->
-                        initAdapter(list)
-                    }
-                }
-            } else {
-                lifecycleScope.launch{
-                    viewModel.getFlashLightsFromDb().collectLatest { list ->
-                        initAdapter(list)
-                    }
-                }
-            }
-
+            (binding.rvList.adapter as ItemsAdapter).filter(it.toString())
         }
     }
 
@@ -132,11 +127,7 @@ class ApplicationFragment : BaseFragment<FragmentApplicationBinding>() {
                 viewModel.getColorLights()
             }
             "flashes" -> {
-                lifecycleScope.launch {
-                    viewModel.getFlashLightsFromDb().collect {
-                        initAdapter(it)
-                    }
-                }
+                viewModel.getFlashLights()
             }
             "sosAlerts" -> {
                 viewModel.getSosAlerts()
@@ -144,9 +135,9 @@ class ApplicationFragment : BaseFragment<FragmentApplicationBinding>() {
         }
     }
 
-    private fun initAdapter(items: List<FlashLightsEntity>) {
+    private fun initAdapter(items: List<ResponseModel>) {
         (binding.rvList.adapter as? ItemsAdapter)?.modifyList(items.map { it.copy() }
-            .sortedBy { it.ratingValue.toInt() })
+            .sortedBy { it.ratingValue?.toInt() })
 
     }
 }

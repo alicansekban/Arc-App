@@ -115,6 +115,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
             supportFragmentManager.findFragmentById(R.id.navMainFragment) as NavHostFragment
         navController = navHostFragment.navController
         // Setup the bottom navigation view with navController
+
         binding.bottomNavigation.setupWithNavController(navController)
         binding.bottomNavigation.itemIconTintList = null
 

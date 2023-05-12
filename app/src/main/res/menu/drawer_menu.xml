@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_flash"
+            android:icon="@drawable/ic_flash"
+            android:title="@string/menu_flashes"/>
+        <item
+            android:id="@+id/nav_colors"
+            android:icon="@drawable/ic_colors"
+            android:title="@string/menu_colors"/>
+        <item
+            android:id="@+id/nav_sos"
+            android:icon="@drawable/ic_sos_alerts"
+            android:title="@string/menu_sosAlerts"/>
+
+
+    </group>
+</menu>
