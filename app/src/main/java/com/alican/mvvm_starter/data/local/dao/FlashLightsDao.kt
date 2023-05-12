@@ -1,4 +1,4 @@
-package com.alican.mvvm_starter.data.local
+package com.alican.mvvm_starter.data.local.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
@@ -18,5 +18,5 @@ interface FlashLightsDao {
     fun getAllData(searchQuery:String) : Flow<List<FlashLightsEntity>>
 
     @Query("Select Count(*) from flashlights ")
-    suspend fun getSatelliteCount() : Int
+    suspend fun getFlashLightsCount() : Int
 }

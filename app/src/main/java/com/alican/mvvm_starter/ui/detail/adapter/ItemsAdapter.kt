@@ -9,22 +9,22 @@ import com.alican.mvvm_starter.data.local.model.FlashLightsEntity
 import com.alican.mvvm_starter.data.model.ResponseModel
 import com.alican.mvvm_starter.databinding.ItemAdapterBinding
 
-class ItemsAdapter(val onClick: (ResponseModel) -> Unit) :
-    ListAdapter<ResponseModel, ItemsAdapter.ViewHolder>(object :
-        DiffUtil.ItemCallback<ResponseModel>() {
-        override fun areItemsTheSame(oldItem: ResponseModel, newItem: ResponseModel): Boolean {
+class ItemsAdapter(val onClick: (FlashLightsEntity) -> Unit) :
+    ListAdapter<FlashLightsEntity, ItemsAdapter.ViewHolder>(object :
+        DiffUtil.ItemCallback<FlashLightsEntity>() {
+        override fun areItemsTheSame(oldItem: FlashLightsEntity, newItem: FlashLightsEntity): Boolean {
             return oldItem == newItem
         }
 
         override fun areContentsTheSame(
-            oldItem: ResponseModel,
-            newItem: ResponseModel
+            oldItem: FlashLightsEntity,
+            newItem: FlashLightsEntity
         ): Boolean {
             return oldItem == newItem
         }
 
     }) {
-    private var unFilteredList = listOf<ResponseModel>()
+    private var unFilteredList = listOf<FlashLightsEntity>()
 
     class ViewHolder(val binding: ItemAdapterBinding, onClick: (Int) -> Unit) :
         RecyclerView.ViewHolder(binding.root) {
@@ -48,13 +48,13 @@ class ItemsAdapter(val onClick: (ResponseModel) -> Unit) :
         holder.binding.executePendingBindings()
     }
 
-    fun modifyList(list: List<ResponseModel>) {
+    fun modifyList(list: List<FlashLightsEntity>) {
         unFilteredList = list
         submitList(list)
     }
 
     fun filter(query: String?) {
-        val list = mutableListOf<ResponseModel>()
+        val list = mutableListOf<FlashLightsEntity>()
         if (!query.isNullOrEmpty()) {
             list.addAll(unFilteredList.filter {
                 it.name?.contains(query.toString(), ignoreCase = true) == true

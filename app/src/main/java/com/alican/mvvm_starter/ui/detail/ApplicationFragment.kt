@@ -30,15 +30,24 @@ class ApplicationFragment : BaseFragment<FragmentApplicationBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        fetchData()
+        //fetchData()
         initObserver()
         initViews()
         initSearch()
+        fetchFlashLightsData()
+    }
+
+    private fun fetchFlashLightsData(searchQuery:String ="") {
+        lifecycleScope.launch {
+            viewModel.repository.fetchFlashLightsFromDb(searchQuery).collect{
+                initAdapter(it)
+            }
+        }
     }
 
     private fun initViews() {
         binding.rvList.adapter = ItemsAdapter {
-            it.packageName?.let { it1 -> requireContext().openGooglePlayStore(it1) }
+            it.packageName.let { it1 -> requireContext().openGooglePlayStore(it1) }
         }
      //   viewModel.getFlashLightsFromDb()
         binding.swipeRefreshLayout.setOnRefreshListener {
@@ -65,7 +74,7 @@ class ApplicationFragment : BaseFragment<FragmentApplicationBinding>() {
                     val result = response.responseObject
                     result?.let {
                         if (it.body()?.isNotEmpty() == true) {
-                            initAdapter(it.body()!!)
+                      //      initAdapter(it.body()!!)
                         }
                     }
                 }
@@ -85,7 +94,7 @@ class ApplicationFragment : BaseFragment<FragmentApplicationBinding>() {
                     val result = response.responseObject
                     result?.let {
                         if (it.body()?.isNotEmpty() == true) {
-                            initAdapter(it.body()!!)
+                          //  initAdapter(it.body()!!)
                         }
 
                     }
@@ -106,7 +115,7 @@ class ApplicationFragment : BaseFragment<FragmentApplicationBinding>() {
                     val result = response.responseObject
                     result?.let {
                         if (it.body()?.isNotEmpty() == true) {
-                            initAdapter(it.body()!!)
+                      //      initAdapter(it.body()!!)
                         }
                     }
                 }
@@ -117,7 +126,7 @@ class ApplicationFragment : BaseFragment<FragmentApplicationBinding>() {
 
     private fun initSearch() {
         binding.edtSearch.addTextChangedListener {
-            (binding.rvList.adapter as ItemsAdapter).filter(it.toString())
+            fetchFlashLightsData(it.toString())
         }
     }
 
@@ -135,9 +144,9 @@ class ApplicationFragment : BaseFragment<FragmentApplicationBinding>() {
         }
     }
 
-    private fun initAdapter(items: List<ResponseModel>) {
+    private fun initAdapter(items: List<FlashLightsEntity>) {
         (binding.rvList.adapter as? ItemsAdapter)?.modifyList(items.map { it.copy() }
-            .sortedBy { it.ratingValue?.toInt() })
+            .sortedBy { it.ratingValue.toInt() })
 
     }
 }

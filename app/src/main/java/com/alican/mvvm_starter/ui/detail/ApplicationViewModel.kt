@@ -9,6 +9,7 @@ import com.alican.mvvm_starter.data.local.AppDatabase
 import com.alican.mvvm_starter.data.local.model.FlashLightsEntity
 import com.alican.mvvm_starter.data.model.ResponseModel
 import com.alican.mvvm_starter.data.remote.webservice.WebService
+import com.alican.mvvm_starter.domain.repository.DataRepository
 import com.murgupluoglu.request.RESPONSE
 import com.murgupluoglu.request.request
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,7 +21,7 @@ import retrofit2.Response
 import javax.inject.Inject
 
 @HiltViewModel
-class ApplicationViewModel @Inject constructor(private val webService: WebService,private val db:AppDatabase) : ViewModel() {
+class ApplicationViewModel @Inject constructor(private val webService: WebService,private val db:AppDatabase, val repository: DataRepository) : ViewModel() {
 
     val flashLightsResponse: MutableLiveData<RESPONSE<Response<List<ResponseModel>>>> =
         MutableLiveData()
@@ -28,6 +29,7 @@ class ApplicationViewModel @Inject constructor(private val webService: WebServic
         MutableLiveData()
     val sosAlertsResponse: MutableLiveData<RESPONSE<Response<List<ResponseModel>>>> =
         MutableLiveData()
+
 
     fun getFlashLights() {
         flashLightsResponse.request({ webService.getFlashLights() })
