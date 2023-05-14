@@ -9,6 +9,7 @@ import com.alican.mvvm_starter.R
 import com.alican.mvvm_starter.base.BaseFragment
 import com.alican.mvvm_starter.data.model.ResponseModel
 import com.alican.mvvm_starter.databinding.FragmentApplicationBinding
+import com.alican.mvvm_starter.ui.MainActivity
 import com.alican.mvvm_starter.ui.detail.adapter.DataAdapter
 import com.alican.mvvm_starter.util.Constant
 import com.alican.mvvm_starter.util.utils.openAppOrPlayStore
@@ -29,6 +30,12 @@ class ApplicationFragment : BaseFragment<FragmentApplicationBinding>() {
         initObserver()
         initViews()
         initSearch()
+        hideToolbar()
+    }
+
+    private fun hideToolbar() {
+        val activity = requireActivity() as MainActivity
+        activity.supportActionBar?.hide()
     }
 
     private fun initViews() {
