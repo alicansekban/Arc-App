@@ -6,4 +6,6 @@
     <string name="menu_flashes">FlashLights</string>
     <string name="menu_colors">ColorLights</string>
     <string name="menu_sosAlerts">SosAlerts</string>
+    <string name="navigation_drawer_open">open</string>
+    <string name="navigation_drawer_close">close</string>
 </resources>

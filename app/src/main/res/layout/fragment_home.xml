@@ -7,7 +7,6 @@
         android:layout_height="match_parent"
         tools:context=".ui.home.HomeFragment">
 
-        <!-- TODO: Update blank fragment layout -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/flashLightsButton"
             android:layout_width="300dp"

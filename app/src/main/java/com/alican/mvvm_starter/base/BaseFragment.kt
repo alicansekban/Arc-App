@@ -1,4 +1,3 @@
-
 package com.alican.mvvm_starter.base
 
 import android.app.ProgressDialog
@@ -12,7 +11,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import com.alican.mvvm_starter.R
-import com.alican.mvvm_starter.util.utils.BottomSheetDialog
 import com.blankj.utilcode.util.LogUtils
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
@@ -23,7 +21,6 @@ abstract class BaseFragment<VDB : ViewDataBinding> : Fragment() {
     lateinit var binding: VDB
     private var dialog: ProgressDialog? = null
     private var wheelingProcessDialogScheduler: ScheduledExecutorService? = null
-    lateinit var bottomSheetDialog: BottomSheetDialog
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -81,19 +78,5 @@ abstract class BaseFragment<VDB : ViewDataBinding> : Fragment() {
     fun hideProgressDialog() {
         val activity = activity as BaseActivity<*>
         activity.hideProgressDialog()
-    }
-
-    @Suppress("SameParameterValue")
-    fun showBottomSheet(
-        context: Context,
-        title: Int,
-        listener: BottomSheetDialog.BottomSheetListener,
-    ) {
-        bottomSheetDialog = BottomSheetDialog.instance.apply {
-            setupSheet(context.getString(title))
-            this.listener = listener
-        }.also {
-            it.show(childFragmentManager, getString(title))
-        }
     }
 }

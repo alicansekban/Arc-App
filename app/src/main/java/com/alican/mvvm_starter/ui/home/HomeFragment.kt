@@ -7,11 +7,11 @@ import androidx.navigation.fragment.findNavController
 import com.alican.mvvm_starter.R
 import com.alican.mvvm_starter.databinding.FragmentHomeBinding
 import com.alican.mvvm_starter.base.BaseFragment
+import com.alican.mvvm_starter.util.Constant
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>() {
-    private val viewModel by viewModels<HomeViewModel>()
     override fun getLayoutId(): Int = R.layout.fragment_home
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -22,14 +22,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         binding.colorLightsButton.setOnClickListener {
             findNavController().navigate(
                 HomeFragmentDirections.actionHomeFragmentToApplicationFragment(
-                    "colors"
+                    Constant.COLORLIGHTS
                 )
             )
         }
         binding.flashLightsButton.setOnClickListener {
             findNavController().navigate(
                 HomeFragmentDirections.actionHomeFragmentToApplicationFragment(
-                    "flashes"
+                    Constant.FLASHLIGHTS
                 )
             )
 
@@ -37,7 +37,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         binding.sosAlerts.setOnClickListener {
             findNavController().navigate(
                 HomeFragmentDirections.actionHomeFragmentToApplicationFragment(
-                    "sosAlerts"
+                    Constant.SOSALERTS
                 )
             )
 

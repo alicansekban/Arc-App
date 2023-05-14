@@ -85,20 +85,15 @@ dependencies {
     implementation "com.squareup.moshi:moshi:$moshiVersion"
     kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion"
 
-
-
     // Reactive Network
     def reactiveNetworkVersion = '3.0.8'
     implementation "com.github.pwittchen:reactivenetwork-rx2:$reactiveNetworkVersion"
 
-
     // Generic Utils
     implementation "com.blankj:utilcodex:1.30.6"
 
-
     // Alerter
     implementation 'com.tapadoo.android:alerter:2.0.0'
-
 
 
     // Glide
@@ -111,14 +106,4 @@ dependencies {
     // Helper for easy request with retrofit & view model
     implementation "com.github.murgupluoglu:request-android:4.2.0"
 
-
-    // Last Adapter
-    implementation "com.github.nitrico.lastadapter:lastadapter:2.3.0"
-    // datastore
-    implementation "androidx.datastore:datastore-preferences:1.0.0"
-
-    // Room
-    implementation "androidx.room:room-runtime:2.5.0"
-    kapt "androidx.room:room-compiler:2.5.0"
-    implementation "androidx.room:room-ktx:2.5.0"
 }

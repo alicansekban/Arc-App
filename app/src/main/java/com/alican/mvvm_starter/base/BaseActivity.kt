@@ -11,14 +11,13 @@ import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
-import androidx.lifecycle.ViewModelProvider.NewInstanceFactory.Companion.instance
 import com.alican.mvvm_starter.R
-import com.alican.mvvm_starter.util.utils.SPPARAM.NETWORK_CONNECTION
-import com.blankj.utilcode.util.SPUtils
-import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
 import com.alican.mvvm_starter.ui.InternetConnectionActivity
 import com.alican.mvvm_starter.ui.MainActivity
+import com.alican.mvvm_starter.util.SPPARAM.NETWORK_CONNECTION
 import com.alican.mvvm_starter.util.utils.customview.CustomDialog
+import com.blankj.utilcode.util.SPUtils
+import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -27,7 +26,6 @@ abstract class BaseActivity<VDB : ViewDataBinding> : AppCompatActivity() {
 
     lateinit var binding: VDB
     private lateinit var mCustomDialog: CustomDialog
-    lateinit var bottomSheetDialog: com.alican.mvvm_starter.util.utils.BottomSheetDialog
     var isCheckInternetActive = true
     private var connectivityDisposable: Disposable? = null
 
@@ -41,19 +39,6 @@ abstract class BaseActivity<VDB : ViewDataBinding> : AppCompatActivity() {
     @LayoutRes
     abstract fun getLayoutId(): Int
 
-    @Suppress("SameParameterValue")
-    fun showBottomSheet(
-        context: Context,
-        title: Int,
-        listener: com.alican.mvvm_starter.util.utils.BottomSheetDialog.BottomSheetListener,
-    ) {
-        bottomSheetDialog = com.alican.mvvm_starter.util.utils.BottomSheetDialog.instance.apply {
-            setupSheet(context.getString(title))
-            this.listener = listener
-        }.also {
-            it.show(supportFragmentManager, getString(title))
-        }
-    }
 
     fun showProgressDialog() {
         try {
