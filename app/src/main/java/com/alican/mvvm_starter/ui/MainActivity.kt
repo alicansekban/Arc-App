@@ -82,16 +82,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
         // Setup the ActionBar with navController and 3 top level destinations
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.homeFragment,
-                //    R.id.searchFragment,
-                //  R.id.shoppingCartFragment,
-                //R.id.favoritesFragment,
-                // R.id.profileFragment,
+                R.id.homeFragment
             )
         )
         navHostFragment.navController.addOnDestinationChangedListener(this)
-        //binding.toolbar.materialToolbar.setNavigationOnClickListener { navController.popBackStack() }
-        val menu = binding.bottomNavigation.menu
 
         binding.bottomNavigation.setOnItemReselectedListener {
             when (it.title) {

@@ -94,7 +94,6 @@ class ApplicationFragment : BaseFragment<FragmentApplicationBinding>() {
     }
 
     private fun initAdapter(items: List<ResponseModel>) {
-        (binding.rvList.adapter as? DataAdapter)?.submitList(items.map { it.copy() }
-            .sortedBy { it.ratingValue?.toInt() }.toMutableList())
+        (binding.rvList.adapter as? DataAdapter)?.submitList(items.map { it.copy() }.sortedByDescending { it.ratingValue }.toMutableList())
     }
 }
